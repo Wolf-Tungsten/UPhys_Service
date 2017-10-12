@@ -66,25 +66,9 @@ class MongodbControl(object):
     async def delete(self, condition, colName):
         await self.db[colName].delete_many(condition)
 
-    # @token ----------------------------------------
-    # be used to identity user
-    def get_token_default(self):
-        token = {
-            'userId': '',
-            'accessToken': '',
-            'accessTime': ''
-        }
-        return token
+    # update document by id
+    async def update_by_id(self, document_id, document):
 
-    def brief_token(self, document, type='brief'):
-        if type == 'brief':
-            brief_document = {
-                'userId': '',
-                'accessToken': '',
-                'accessTime': ''
-            }
-            r_document = self.dict_match(document, brief_document)
-        return r_document
 
     def get_category_default(self):
         category = {
@@ -119,3 +103,62 @@ class MongodbControl(object):
 
         }
         return answer
+
+    def get_column_default(self):
+        column = {
+            'name': '',  # 专栏名称
+            'desc': '',  # 专栏简介
+            'icon': '',  # 专栏图标url
+            'privilege': '',  # 专栏访问权限(所有人=0 用户=1 管理员=2)
+            'visible': False  # 是否显示在专栏列表中，某些专栏只在微信中有入口，在专栏列表中不显示(bool)
+        }
+        return column
+
+    def get_article_default(self):
+        article = {
+            'title': '',  # 文章标题
+            'content': '',  # 文章内容
+            'videos': [],  # 文章附带视频url列表
+            'images': [],  # 文章附带图片url列表
+            'column_id': '',  # 文章所属专栏
+            'read_num': 0,  # 文章阅读量
+            'like_num': 0,  # 文章点赞数
+            'user_id': '',  # 文章发布者
+            'post_time': 0.0,  #文章发布时间
+            'privilege': ''  # 文章阅读权限(所有人=0 用户=1 管理员=2)
+        }
+        return article
+
+    def get_chapter_default(self):
+        chapter = {
+            'title': '',  # 章节名
+            'privilege': ''  # 章节自测权限(所有人=0 用户=1 管理员=2)
+        }
+        return chapter
+
+    def get_puzzle_default(self):
+        puzzle = {
+            'number': '',  # 题号（字符串）
+            'content': '',  # 题目内容
+            'images': '',  # 题目包含图片url列表
+            'type': '',  # 题型(单选='single' 多选='multiple')
+            'chapter_id': '',  # 所属章节
+            'choices': [],  # 选项列表（字符串列表）
+            'answer': [],  # 正确答案选项列表（下标列表）
+            'scores': 0,  # 题目积分数
+            'right_num': 0,  # 被回答正确次数
+            'wrong_num': 0  # 被回答错误次数
+        }
+        return puzzle
+
+    def get_user_default(self):
+        user = {
+            'token': '',  # 认证token
+            'cardnum': '',  # 一卡通号
+            'name': '',  # 姓名
+            'isAdmin': False,  # 是否管理员
+            'exp': 0,  # 问答经验值
+            'right_num': 0,  # 累计答对题数
+            'wrong_num': 0,  # 累计答错题数
+            'scores': 0  # 答题积分
+        }
