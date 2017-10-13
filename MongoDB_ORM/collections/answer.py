@@ -6,10 +6,10 @@ class Answer(CollectionBase):
         CollectionBase.__init__(self, db, 'answer')
 
     # GET /answers
-    def get_answers(self, question_id, page, pagesize):
+    async def get_answers(self, question_id, page, pagesize):
         condition = {'question_id': question_id}
         sort = [('post_time',self.DESCENDING)]
-        return self.find_pages_by_id(condition, sort, page, pagesize)
+        return await self.find_pages_by_id(condition, sort, page, pagesize)
 
     # POST /answer
     async def post_answer(self, answer, user_id):

@@ -2,6 +2,7 @@ import bson
 import pymongo
 import time
 import datetime
+import asyncio
 
 
 class CollectionBase(object):
@@ -19,16 +20,27 @@ class CollectionBase(object):
 
     async def find_one_by_id(self, doc_id):
         condition = {'_id': self.ObjectId(doc_id)}
-        return await self.collection.find_one(condition)
+        doc = await self.collection.find_one(condition)
+        doc['_id'] = str(doc['_id'])
+        return doc
 
-    def find_all(self):
-        return self.collection.find({})
+    async def find_all(self):
+        cursor = self.collection.find({})
+        result = []
+        async for doc in cursor:
+            doc['_id'] = str(doc['_id'])
+            result.append(doc)
+        return result
 
-    def find_pages_by_id(self, condition, sort, page, pagesize):
+    async def find_pages_by_id(self, condition, sort, page, pagesize):
         limit = pagesize
         skip = (page - 1) * pagesize
         cursor = self.collection.find(condition, limit=limit, skip=skip, sort=sort)
-        return cursor
+        result = []
+        async for doc in cursor:
+            doc['_id'] = str(doc['_id'])
+            result.append(doc)
+        return result
 
     async def insert_one(self, doc):
         await self.collection.insert(doc)

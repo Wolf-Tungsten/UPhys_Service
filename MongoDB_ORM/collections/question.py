@@ -6,11 +6,11 @@ class Question(CollectionBase):
         CollectionBase(self, db, 'question')
 
     # GET /questions
-    def get_questions(self, category_id, page, pagesize):
+    async def get_questions(self, category_id, page, pagesize):
         condition = {'category_id': category_id}
         sort = [('post_time', pymongo.DESCENDING)]
-        cursor = self.find_pages_by_id(condition, sort, page, pagesize)
-        return cursor
+        result = await self.find_pages_by_id(condition, sort, page, pagesize)
+        return result
 
     # GET /question
     async def get_question(self, question_id):
