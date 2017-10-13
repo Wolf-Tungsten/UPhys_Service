@@ -8,10 +8,8 @@ class Question(CollectionBase):
     # GET /questions
     def get_questions(self, category_id, page, pagesize):
         condition = {'category_id': category_id}
-        limit = pagesize
-        skip = (page - 1) * pagesize
         sort = [('post_time', pymongo.DESCENDING)]
-        cursor = self.collection.find(condition, limit=limit, skip=skip, sort=sort)
+        cursor = self.find_pages_by_id(condition, sort, page, pagesize)
         return cursor
 
     # GET /question
@@ -19,12 +17,16 @@ class Question(CollectionBase):
         return await self.find_one_by_id(question_id)
 
     # POST /question
-    async def post_question(self, category_id, question):
+    async def post_question(self, category_id, question, user_id):
         question['category_id'] = category_id
+        question['post_time'] = self.timestamp()
+        question['user_id'] = user_id
         await self.insert_one(question)
 
     # PUT /question
-    async def put_question(self, question_id, question):
+    async def put_question(self, question_id, question, user_id):
+        question['modify_user_id'] = user_id
+        question['modify_time'] = self.timestamp()
         await self.update_one_by_id(question_id, question)
 
     # DELETE /question
