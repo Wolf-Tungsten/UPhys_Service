@@ -1,5 +1,6 @@
 from tornado.web import RequestHandler
 from handler.config import *
+import json
 
 class BaseHandler(RequestHandler):
 
@@ -12,6 +13,21 @@ class BaseHandler(RequestHandler):
             return user_privilege
         return no_privilege
 
+    def finish_success(self, **kwargs):
+        rs = {
+            'status': 'success',
+            'code':'0',
+            'result':list(kwargs.values())[0]
+        }
+        self.finish(json.dumps(rs))
+
+    def finish_err(self, **kwargs):
+        rs = {
+            'status': 'success',
+            'code':'0',
+            'result':list(kwargs.values())[0]
+        }
+        self.finish(json.dumps(rs))
 
     '''
     async def is_user(self,token):
