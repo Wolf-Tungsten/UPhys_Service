@@ -3,7 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="1f5fb057-050a-409d-84d8-717fd1ff2ac2" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MongoDB_ORM/collections/category.py" afterPath="$PROJECT_DIR$/MongoDB_ORM/collections/category.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MongoDB_ORM/collections/answer.py" afterPath="$PROJECT_DIR$/MongoDB_ORM/collections/answer.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MongoDB_ORM/collections/base.py" afterPath="$PROJECT_DIR$/MongoDB_ORM/collections/base.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MongoDB_ORM/collections/question.py" afterPath="$PROJECT_DIR$/MongoDB_ORM/collections/question.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/MongoDB_ORM/collections/user.py" afterPath="$PROJECT_DIR$/MongoDB_ORM/collections/user.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -53,8 +56,8 @@
       <file leaf-file-name="question.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MongoDB_ORM/collections/question.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="12" column="21" lean-forward="false" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
+            <state relative-caret-position="-70">
+              <caret line="9" column="48" lean-forward="true" selection-start-line="9" selection-start-column="48" selection-end-line="9" selection-end-column="48" />
               <folding>
                 <element signature="e#0#55#0" expanded="true" />
               </folding>
@@ -65,8 +68,8 @@
       <file leaf-file-name="user.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MongoDB_ORM/collections/user.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="341">
-              <caret line="38" column="21" lean-forward="true" selection-start-line="38" selection-start-column="21" selection-end-line="38" selection-end-column="22" />
+            <state relative-caret-position="255">
+              <caret line="17" column="31" lean-forward="true" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="31" />
               <folding>
                 <element signature="e#0#55#0" expanded="true" />
               </folding>
@@ -74,11 +77,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="answer.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="answer.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/MongoDB_ORM/collections/answer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
+            <state relative-caret-position="-190">
+              <caret line="17" column="37" lean-forward="true" selection-start-line="17" selection-start-column="37" selection-end-line="17" selection-end-column="37" />
               <folding />
             </state>
           </provider>
@@ -97,8 +100,8 @@
       <file leaf-file-name="base.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MongoDB_ORM/collections/base.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="434">
-              <caret line="42" column="21" lean-forward="false" selection-start-line="42" selection-start-column="21" selection-end-line="42" selection-end-column="21" />
+            <state relative-caret-position="-45">
+              <caret line="18" column="43" lean-forward="true" selection-start-line="18" selection-start-column="43" selection-end-line="18" selection-end-column="43" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -118,11 +121,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="category.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="category.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/MongoDB_ORM/collections/category.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="215">
-              <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+            <state relative-caret-position="255">
+              <caret line="17" column="19" lean-forward="true" selection-start-line="17" selection-start-column="19" selection-end-line="17" selection-end-column="19" />
               <folding />
             </state>
           </provider>
@@ -153,13 +156,13 @@
         <option value="$PROJECT_DIR$/ORM/MongoDB/base.py" />
         <option value="$PROJECT_DIR$/ORM/MongoDB/category.py" />
         <option value="$PROJECT_DIR$/app.py" />
-        <option value="$PROJECT_DIR$/MongoDB_ORM/collections/user.py" />
         <option value="$PROJECT_DIR$/MongoDB_ORM/ORM.py" />
-        <option value="$PROJECT_DIR$/MongoDB_ORM/collections/base.py" />
-        <option value="$PROJECT_DIR$/MongoDB_ORM/collections/question.py" />
-        <option value="$PROJECT_DIR$/MongoDB_ORM/collections/answer.py" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/MongoDB_ORM/collections/category.py" />
+        <option value="$PROJECT_DIR$/MongoDB_ORM/collections/base.py" />
+        <option value="$PROJECT_DIR$/MongoDB_ORM/collections/answer.py" />
+        <option value="$PROJECT_DIR$/MongoDB_ORM/collections/question.py" />
+        <option value="$PROJECT_DIR$/MongoDB_ORM/collections/user.py" />
       </list>
     </option>
   </component>
@@ -513,7 +516,14 @@
       <option name="project" value="LOCAL" />
       <updated>1507914359920</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="修正category不正确的find，添加权限">
+      <created>1507962816034</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1507962816034</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -552,7 +562,8 @@
     <MESSAGE value="重新造ORM" />
     <MESSAGE value="question-orm" />
     <MESSAGE value="第一部分ORM完工" />
-    <option name="LAST_COMMIT_MESSAGE" value="第一部分ORM完工" />
+    <MESSAGE value="修正category不正确的find，添加权限" />
+    <option name="LAST_COMMIT_MESSAGE" value="修正category不正确的find，添加权限" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -713,29 +724,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MongoDB_ORM/collections/answer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="0" lean-forward="false" selection-start-line="12" selection-start-column="0" selection-end-line="12" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
           <caret line="9" column="14" lean-forward="false" selection-start-line="9" selection-start-column="14" selection-end-line="9" selection-end-column="14" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/MongoDB_ORM/collections/question.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="12" column="21" lean-forward="false" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
-          <folding>
-            <element signature="e#0#55#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -749,10 +742,28 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/MongoDB_ORM/collections/category.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="17" column="19" lean-forward="true" selection-start-line="17" selection-start-column="19" selection-end-line="17" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/MongoDB_ORM/collections/user.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
-          <caret line="38" column="21" lean-forward="true" selection-start-line="38" selection-start-column="21" selection-end-line="38" selection-end-column="22" />
+        <state relative-caret-position="255">
+          <caret line="17" column="31" lean-forward="true" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="31" />
+          <folding>
+            <element signature="e#0#55#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MongoDB_ORM/collections/question.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-70">
+          <caret line="9" column="48" lean-forward="true" selection-start-line="9" selection-start-column="48" selection-end-line="9" selection-end-column="48" />
           <folding>
             <element signature="e#0#55#0" expanded="true" />
           </folding>
@@ -761,18 +772,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/MongoDB_ORM/collections/base.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="434">
-          <caret line="42" column="21" lean-forward="false" selection-start-line="42" selection-start-column="21" selection-end-line="42" selection-end-column="21" />
+        <state relative-caret-position="-45">
+          <caret line="18" column="43" lean-forward="true" selection-start-line="18" selection-start-column="43" selection-end-line="18" selection-end-column="43" />
           <folding>
             <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/MongoDB_ORM/collections/category.py">
+    <entry file="file://$PROJECT_DIR$/MongoDB_ORM/collections/answer.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="215">
-          <caret line="16" column="0" lean-forward="true" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+        <state relative-caret-position="-190">
+          <caret line="17" column="37" lean-forward="true" selection-start-line="17" selection-start-column="37" selection-end-line="17" selection-end-column="37" />
           <folding />
         </state>
       </provider>

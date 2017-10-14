@@ -9,7 +9,7 @@ class Answer(CollectionBase):
     async def get_answers(self, question_id, page, pagesize):
         condition = {'question_id': question_id}
         sort = [('post_time',self.DESCENDING)]
-        return await self.find_pages_by_id(condition, sort, page, pagesize)
+        return await self.find_pages_by_condition(condition, sort, page, pagesize)
 
     # POST /answer
     async def post_answer(self, answer, user_id):
