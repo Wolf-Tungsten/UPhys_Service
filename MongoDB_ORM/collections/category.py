@@ -6,8 +6,14 @@ class Category(CollectionBase):
         CollectionBase.__init__(self, db, 'category')
 
     # GET /categories
-    async def get_categories(self):
-        return self.collection.find()
+    async def get_categories(self, privilege):
+        condition = {'privilege': {'$lt': privilege + 1}}
+        cursor = self.collection.find(condition)
+        result = []
+        async for doc in cursor:
+            doc['_id'] = str(doc['_id'])
+            result.append(doc)
+        return result
 
     # GET /category
     async def get_category(self, category_id):
