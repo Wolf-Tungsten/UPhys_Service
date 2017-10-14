@@ -4,7 +4,7 @@ import datetime as dt
 
 class User(CollectionBase):
     def __init__(self, db):
-        CollectionBase(self, db, 'user')
+        CollectionBase.__init__(self, db, 'user')
 
     def get_default(self):
         user = {

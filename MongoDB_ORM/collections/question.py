@@ -3,13 +3,13 @@ import pymongo
 
 class Question(CollectionBase):
     def __init__(self, db):
-        CollectionBase(self, db, 'question')
+        CollectionBase.__init__(self, db, 'question')
 
     # GET /questions
     async def get_questions(self, category_id, page, pagesize):
         condition = {'category_id': category_id}
         sort = [('post_time', pymongo.DESCENDING)]
-        result = await self.find_pages_by_id(condition, sort, page, pagesize)
+        result = await self.find_pages_by_condition(condition, sort, page, pagesize)
         return result
 
     # GET /question
