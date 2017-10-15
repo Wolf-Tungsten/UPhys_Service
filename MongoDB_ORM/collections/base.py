@@ -32,7 +32,7 @@ class CollectionBase(object):
             result.append(doc)
         return result
 
-    async def find_pages_by_condition(self, condition, sort, page, paelegesize):
+    async def find_pages_by_condition(self, condition, sort, page, pagesize):
         limit = pagesize
         skip = (page - 1) * pagesize
         cursor = self.collection.find(condition, limit=limit, skip=skip, sort=sort)
