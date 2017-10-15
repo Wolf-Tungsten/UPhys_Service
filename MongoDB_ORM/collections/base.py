@@ -32,7 +32,7 @@ class CollectionBase(object):
             result.append(doc)
         return result
 
-    async def find_pages_by_condition(self, condition, sort, page, pagesize):
+    async def find_pages_by_condition(self, condition, sort, page, paelegesize):
         limit = pagesize
         skip = (page - 1) * pagesize
         cursor = self.collection.find(condition, limit=limit, skip=skip, sort=sort)
@@ -52,4 +52,4 @@ class CollectionBase(object):
 
     async def delete_one_by_id(self, doc_id):
         condition = {'_id': self.ObjectId(doc_id)}
-        await self.collection.delete(condition)
+        await self.collection.delete_one(condition)
