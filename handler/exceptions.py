@@ -55,3 +55,10 @@ class FrequencyError(HTTPError):
         self.arg_name = res_name
         self.code = errors.FREQUENCY_ERROR
 
+
+class AuthError(HTTPError):
+    def __init__(self,res_name):
+        super(AuthError, self).__init__(401,"验证失败:{0}".format(res_name))
+        self.arg_name = res_name
+        self.code = errors.AUTH_ERROR
+
