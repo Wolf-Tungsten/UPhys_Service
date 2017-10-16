@@ -32,6 +32,7 @@ class User(CollectionBase):
         user_template['name'] = name
         user_template['isAdmin'] = isAdmin
         await self.insert_one(user_template)
+        return token
 
     # 使用token获取用户身份
     async def query_user_by_token(self, token):
@@ -79,14 +80,13 @@ class User(CollectionBase):
     # PUT /user&name
     async def put_user_with_name(self, token, username):
         current = await self.query_user_by_token(token)
-        current['name'] = username
-        await self.update_one_by_id(str(current['_id']), current)
+        doc={'name' : username}
+        await self.update_one_by_id(str(current['_id']), doc)
 
     # PUT /user&user_id&isAdmin
     async def put_user_with_id_admin(self, user_id, isAdmin):
-        current = await self.find_one_by_id(user_id)
-        current['isAdmin'] = isAdmin
-        await self.update_one_by_id(user_id, current)
+        doc={'isAdmin' : isAdmin }
+        await self.update_one_by_id(user_id, doc)
 
     # DELETE /user
     async def delete_user(self, user_id):
