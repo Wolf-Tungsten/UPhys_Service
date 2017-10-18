@@ -52,4 +52,4 @@ class CollectionBase(object):
 
     async def delete_one_by_id(self, doc_id):
         condition = {'_id': self.ObjectId(doc_id)}
-        await self.collection.delete(condition)
+        await self.collection.delete_one(condition)

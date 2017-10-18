@@ -2,8 +2,9 @@ import tornado.web
 from motor.motor_tornado import MotorClient
 from tornado.options import options, define
 from MongoDB_ORM.ORM import ORM
-import config
+#import config
 import routes
+import IPython
 
 define("port", default=7942, help="本地监听端口", type=int)
 define("DEBUG", default=True, help="是否开启debug模式", type=bool)
@@ -25,7 +26,7 @@ application = tornado.web.Application(
     static_hash_cache=True,
     autoreload=True,
     # primary_number=random.randint(0,10000),
-    debug_mode=False,
+    debug_mode=True,
 )
 
 
@@ -33,3 +34,4 @@ if __name__ == "__main__":
     application.listen(options.port)
     ioloop = tornado.ioloop.IOLoop.current()
     ioloop.start()
+    IPython.embed()

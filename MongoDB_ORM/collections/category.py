@@ -16,8 +16,11 @@ class Category(CollectionBase):
         return result
 
     # GET /category
-    async def get_category(self, category_id):
-        return await self.find_one_by_id(category_id)
+    async def get_category(self, category_id,privilege):
+        result = await self.find_one_by_id(category_id)
+        if result['privilege'] <= privilege:
+            return result
+        return {}
 
     # POST /category
     async def post_category(self, category):
