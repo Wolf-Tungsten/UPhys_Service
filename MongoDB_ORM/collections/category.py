@@ -16,7 +16,7 @@ class Category(CollectionBase):
         return result
 
     # GET /category
-    async def get_category(self, category_id,privilege):
+    async def get_category(self, category_id, privilege):
         result = await self.find_one_by_id(category_id)
         if result['privilege'] <= privilege:
             return result
@@ -33,6 +33,14 @@ class Category(CollectionBase):
     # DELETE /category
     async def delete_category(self, category_id):
         await self.delete_one_by_id(category_id)
+
+    async def get_privilege(self, category_id):
+        condition = {'_id': self.ObjectId(category_id)}
+        category = await self.collection.find_one(condition)
+        if category is not None:
+            return category['privilege']
+        else:
+            return -1
 
     def get_default(self):
         category = {

@@ -27,17 +27,16 @@ class UserHandler(BaseHandler):
         self.finish_success(result='ok')
 
     async def put(self):
-        if  not await self.is_admin:
+        if not await self.is_admin:
             raise PermissionDeniedError("需要管理员权限")
-        name = self.get_argument("name",None)
+        name = self.get_argument("name", None)
         if name:
-            await self.db.user.put_user_with_name(self.token,name)
+            await self.db.user.put_user_with_name(self.token, name)
         else:
             user_id = self.get_argument("user_id")
             isAdmin = self.get_argument("isAdmin") == str(True)
             await self.db.user.put_user_with_id_admin(user_id,isAdmin)
         self.finish_success(result='ok')
-
 
     async def delete(self):
         if not await self.is_admin:

@@ -80,7 +80,7 @@ class User(CollectionBase):
     # PUT /user&name
     async def put_user_with_name(self, token, username):
         current = await self.query_user_by_token(token)
-        doc={'name' : username}
+        doc = {'name': username}
         await self.update_one_by_id(str(current['_id']), doc)
 
     # PUT /user&user_id&isAdmin

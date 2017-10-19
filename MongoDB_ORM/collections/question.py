@@ -33,6 +33,12 @@ class Question(CollectionBase):
     async def delete_question(self, question_id):
         await self.delete_one_by_id(question_id)
 
+    async def get_question_category_id(self, question_id):
+        question = await self.find_one_by_id(question_id)
+        if question is not None:
+            return question['category_id']
+        return question
+
     def get_default(self):
         question = {
             'title': '',  # 问题标题
@@ -42,6 +48,7 @@ class Question(CollectionBase):
             'user_id': '',  # 问题发布者
             'post_time': 0.0,  # 问题发布时间
             'modify_user_id': '',  # 问题最后修改者
-            'modify_time': 0.0  # 问题最后修改时间
+            'modify_time': 0.0,  # 问题最后修改时间
+            'category_id': ''  # 问题所在category_id
         }
         return question

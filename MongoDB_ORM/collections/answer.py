@@ -47,6 +47,12 @@ class Answer(CollectionBase):
             current_answer['likes'].remove(index)
         await self.update_one_by_id(answer_id, current_answer)
 
+    async def get_answer_question_id(self, answer_id):
+        result = await self.find_one_by_id(answer_id)
+        if result is not None:
+            return result['question_id']
+        return result
+
     def get_default(self):
         answer = {
                 'title': '',  # 回答标题

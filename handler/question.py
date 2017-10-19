@@ -3,7 +3,7 @@ import routes
 from handler.exceptions import PermissionDeniedError,MissingArgumentError
 import IPython
 
-class sCategoryHandler(BaseHandler):
+class sQuestionHandler(BaseHandler):
     async def get(self):
         token = self.token
         privilege = await self.get_privilege(token=token)

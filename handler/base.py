@@ -1,5 +1,5 @@
 from tornado.web import RequestHandler
-from handler.config import *
+from handler.handler_config import *
 from handler.exceptions import ArgsError,MissingArgumentError,PermissionDeniedError
 import json
 import IPython
@@ -7,7 +7,7 @@ DEFAULT_TYPE = []
 
 class BaseHandler(RequestHandler):
 
-    #获取权限
+    # 获取权限
     @property
     async def privilege(self):
         if not await self.user_info:
@@ -16,7 +16,7 @@ class BaseHandler(RequestHandler):
             return admin_privilege
         return user_privilege
 
-    #鉴定管理员
+    # 鉴定管理员
     @property
     async def is_admin(self):
         privilege = await self.privilege
@@ -55,7 +55,7 @@ class BaseHandler(RequestHandler):
 
     @property
     def token(self):
-        return self.get_cookie("token",default='')
+        return self.get_cookie("token", default='')
 
     @property
     def db(self):
