@@ -1,66 +1,65 @@
 from handler.base import BaseHandler
 import routes
-from handler.exceptions import PermissionDeniedError,MissingArgumentError
-import IPython
+from handler.exceptions import PermissionDeniedError
 
 class sQuestionHandler(BaseHandler):
     async def get(self):
-        token = self.token
-        privilege = await self.get_privilege(token=token)
-        list = await self.db.category.get_categories(privilege)
+        category_id = self.get_argument("category_id")
+        page = self.get_argument("page")
+        pagesize = self.get_argument("pagesize")
+        privilege = await self.privilege
+        question_privilege = await self.db.category.get_privilege(category_id)
+        if question_privilege > privilege:
+            raise PermissionDeniedError("没有访问权限")
+        list = await self.db.question.get_questions(category_id,page,pagesize)
         self.finish_success(result=list)
 
-class CategoryHandler(BaseHandler):
+class QuestionHandler(BaseHandler):
     async def get(self):
-        token = self.token
-        json = self.json_body
-        try:
-            category_id = json["category_id"]
-        except KeyError:
-            raise MissingArgumentError("缺少category_id")
-        privilege = await self.get_privilege(token)
-        list = await self.db.category.get_category(category_id,privilege)
+        if not await self.question_allow:
+            raise PermissionDeniedError("没有访问权限")
+        question_id = self.get_argument("question_id")
+        list = await self.db.question.get_question(question_id)
+        answer_count = await self.db.answer.get_answer_count(question_id)
+        list.update({"answer_count":answer_count})
         self.finish_success(result=list)
 
     async def post(self):
-        token = self.token
-        json = self.json_body
-        if  not await self.is_admin(token):
-            raise PermissionDeniedError("需要管理员权限")
-        try:
-            category = json['category']
-        except KeyError:
-            raise MissingArgumentError("缺少category")
-        await self.db.category.post_category(category)
+        user_id =await self.user_id
+        privilege = await self.privilege
+        category_id = self.get_argument("category_id")
+        question_privilege = await self.db.category.get_privilege(category_id)
+        if question_privilege > privilege:
+            raise PermissionDeniedError("没有访问权限")
+        default_question = self.db.question.get_default()
+        question = self.get_argument("question")
+        for q in question:
+            default_question[q] = question[q]
+        await self.db.question.post_question(category_id,default_question,user_id)
+        await self.db.user.change_exp(user_id,10)
         self.finish_success(result='ok')
 
     async def put(self):
-        token = self.token
-        json = self.json_body
-        if  not await self.is_admin(token):
-            raise PermissionDeniedError("需要管理员权限")
-        try:
-            category_id = json['category_id']
-            category = json['category']
-        except KeyError:
-            raise MissingArgumentError("缺少参数")
-        await self.db.category.put_category(category_id,category)
+        modify_user_id = await self.user_id
+        question_id = self.get_argument("question_id")
+        user_id = await self.db.question.get_user_id(question_id)
+        if  not await self.is_admin and modify_user_id != user_id:
+            raise PermissionDeniedError("没有修改权限")
+        question = self.get_argument("question")
+        await self.db.question.put_question(question_id,question,modify_user_id)
         self.finish_success(result='ok')
 
 
     async def delete(self):
-        token = self.token
-        json = self.json_body
-        if not await self.is_admin(token):
+        if not await self.is_admin:
             raise PermissionDeniedError("需要管理员权限")
-        try:
-            category_id = json['category_id']
-        except KeyError:
-            raise MissingArgumentError("缺少category_id")
-        await self.db.category.delete_category(category_id)
+        question_id = self.get_argument("question_id")
+        user_id = self.db.question.get_user_id(question_id)
+        await self.db.question.delete_question(question_id)
+        await self.db.user.change_exp(user_id,-10)
         self.finish_success(result='ok')
 
 routes.handlers +=[
-    (r'/categories',sCategoryHandler),
-    (r'/category',CategoryHandler)
+    (r'/questions',sQuestionHandler),
+    (r'/question',QuestionHandler)
 ]

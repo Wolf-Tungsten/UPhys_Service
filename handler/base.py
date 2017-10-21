@@ -75,7 +75,7 @@ class BaseHandler(RequestHandler):
         if not await self.user_info:
             raise PermissionDeniedError("未登录")
         else:
-            return self._user_info['_id']
+            return str(self._user_info['_id'])
 
     def get_argument(self, name, default=DEFAULT_TYPE, strip=True):
         if name in self.json_body:
@@ -85,3 +85,24 @@ class BaseHandler(RequestHandler):
             raise MissingArgumentError(name)
         else:
             return default
+
+    @property
+    async def answer_allow(self):
+        privilege = await self.privilege
+        answer_id = self.get_argument("answer_id")
+        question_id = await self.db.answer.get_answer_question_id(answer_id)
+        category_id = await self.db.question.get_question_category_id(question_id)
+        answer_privilege = await self.db.category.get_privilege(category_id)
+        if privilege < answer_privilege:
+            return False
+        return True
+
+    @property
+    async def question_allow(self):
+        privilege = await self.privilege
+        question_id = self.get_argument("question_id")
+        category_id = await self.db.question.get_question_category_id(question_id)
+        answer_privilege = await self.db.category.get_privilege(category_id)
+        if privilege < answer_privilege:
+            return False
+        return True

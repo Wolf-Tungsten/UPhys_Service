@@ -39,6 +39,16 @@ class Question(CollectionBase):
             return question['category_id']
         return question
 
+    async def get_user_id(self,question_id):
+        question = await self.find_one_by_id(question_id)
+        if question is not None:
+            return question['user_id']
+        return question
+
+    async def get_question_count(self,category_id):
+        condition = {"category_id":category_id}
+        return await self.get_count_by_condition(condition)
+
     def get_default(self):
         question = {
             'title': '',  # 问题标题
