@@ -24,6 +24,7 @@ class AnswerHandler(BaseHandler):
         for a in answer:
             default_answer[a] = answer[a]
         await self.db.answer.post_answer(question_id,default_answer,user_id)
+        await self.db.user.change_exp(user_id,20)
         self.finish_success(result='ok')
 
     async def put(self):
@@ -41,7 +42,9 @@ class AnswerHandler(BaseHandler):
         if not await self.is_admin:
             raise PermissionDeniedError("需要管理员权限")
         answer_id = self.get_argument("answer_id")
+        user_id = await self.db.answer.get_user_id(answer_id)
         await self.db.answer.delete_answer(answer_id)
+        await self.db.user.change_exp(user_id,-20)
         self.finish_success(result='ok')
 
 class VoteHandler(BaseHandler):
@@ -51,6 +54,8 @@ class VoteHandler(BaseHandler):
         if not await self.answer_allow:
             raise PermissionDeniedError("没有访问权限")
         await self.db.answer.post_answer_vote(answer_id,user_id)
+        user_id = await self.db.answer.get_user_id(answer_id)
+        await self.db.user.change_exp(user_id,1)
         self.finish_success(result='ok')
 
     async def delete(self):
@@ -59,6 +64,8 @@ class VoteHandler(BaseHandler):
         if not await self.answer_allow:
             raise PermissionDeniedError("没有访问权限")
         await self.db.answer.delete_answer_vote(answer_id,user_id)
+        user_id = await self.db.answer.get_user_id(answer_id)
+        await self.db.user.change_exp(user_id,-1)
         self.finish_success(result='ok')
 
 routes.handlers +=[

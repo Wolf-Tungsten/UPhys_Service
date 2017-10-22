@@ -54,7 +54,7 @@ class QuestionHandler(BaseHandler):
         if not await self.is_admin:
             raise PermissionDeniedError("需要管理员权限")
         question_id = self.get_argument("question_id")
-        user_id = self.db.question.get_user_id(question_id)
+        user_id = await self.db.question.get_user_id(question_id)
         await self.db.question.delete_question(question_id)
         await self.db.user.change_exp(user_id,-10)
         self.finish_success(result='ok')
