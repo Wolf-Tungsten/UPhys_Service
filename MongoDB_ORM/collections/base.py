@@ -21,7 +21,8 @@ class CollectionBase(object):
     async def find_one_by_id(self, doc_id):
         condition = {'_id': self.ObjectId(doc_id)}
         doc = await self.collection.find_one(condition)
-        doc['_id'] = str(doc['_id'])
+        if doc is not None:
+            doc['_id'] = str(doc['_id'])
         return doc
 
     async def find_all(self):
@@ -54,5 +55,5 @@ class CollectionBase(object):
         condition = {'_id': self.ObjectId(doc_id)}
         await self.collection.delete_one(condition)
 
-    async def get_count_by_condition(self,condition):
+    async def get_count_by_condition(self, condition):
         return await self.collection.find(condition).count()

@@ -1,0 +1,11 @@
+{
+  "name": "UPhys_Service",
+  "version": "0.0.1",
+  "description": "格物东南后端服务",
+  "title": "格物东南 后端接口文档",
+  "url": "http://v3.myseu.cn:6280/uphyserv",
+  "header": {
+    "title": "约定",
+    "filename": "doc_header.md"
+  }
+}
