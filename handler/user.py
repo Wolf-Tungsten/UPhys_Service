@@ -64,7 +64,7 @@ class UserHandler(BaseHandler):
             response = response.body
             return response
         except HTTPError:
-            raise AuthError("登录失败")
+            raise AuthError("统一认证失败")
 
 
     async def get_name(self,uuid):

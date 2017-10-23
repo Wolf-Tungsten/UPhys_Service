@@ -1,4 +1,6 @@
 handlers = list()
 
-from handler.category import  CategoryHandler
-from handler.user import UserHandler
+from handler import  category
+from handler import user
+from handler import question
+from handler import answer

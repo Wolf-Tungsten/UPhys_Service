@@ -1,5 +1,5 @@
 from MongoDB_ORM.collections.base import CollectionBase
-
+import IPython
 
 class Answer(CollectionBase):
     def __init__(self, db):
@@ -12,9 +12,10 @@ class Answer(CollectionBase):
         return await self.find_pages_by_condition(condition, sort, page, pagesize)
 
     # POST /answer
-    async def post_answer(self, answer, user_id):
+    async def post_answer(self, question_id,answer, user_id):
         answer['user_id'] = user_id
         answer['post_time'] = self.timestamp()
+        answer['question_id'] = question_id
         await self.insert_one(answer)
 
     # PUT /answer
@@ -33,18 +34,18 @@ class Answer(CollectionBase):
         if user_id not in current_answer['likes']:
             current_answer['likes'].append(user_id)
         if user_id in current_answer['dislikes']:
-            index = current_answer['dislikes'].index(user_id)
-            current_answer['dislikes'].remove(index)
+            current_answer['dislikes'].remove(user_id)
+        current_answer.pop('_id')
         await self.update_one_by_id(answer_id, current_answer)
 
     # DELETE /answer/vote
-    async def delete_answer_post(self, answer_id, user_id):
+    async def delete_answer_vote(self, answer_id, user_id):
         current_answer = await self.find_one_by_id(answer_id)
         if user_id not in current_answer['dislikes']:
             current_answer['dislikes'].append(user_id)
         if user_id in current_answer['likes']:
-            index = current_answer['likes'].index(user_id)
-            current_answer['likes'].remove(index)
+            current_answer['likes'].remove(user_id)
+        current_answer.pop('_id')
         await self.update_one_by_id(answer_id, current_answer)
 
     async def get_answer_question_id(self, answer_id):
@@ -52,6 +53,16 @@ class Answer(CollectionBase):
         if result is not None:
             return result['question_id']
         return result
+
+    async def get_user_id(self, answer_id):
+        answer = await self.find_one_by_id(answer_id)
+        if answer is not None:
+            return answer['user_id']
+        return answer
+
+    async def get_answer_count(self,question_id):
+        condition = {"question_id":question_id}
+        return await self.get_count_by_condition(condition)
 
     def get_default(self):
         answer = {

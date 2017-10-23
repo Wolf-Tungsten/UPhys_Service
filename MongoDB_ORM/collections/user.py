@@ -48,25 +48,25 @@ class User(CollectionBase):
     # 根据id修改用户经验值，delta可正可负
     async def change_exp(self, user_id, delta):
         current = await self.find_one_by_id(user_id)
-        current['exp'] = current['exp'] + delta
+        current = {'exp':current['exp'] + delta}
         await self.update_one_by_id(user_id, current)
 
     # 根据id修改用户答对题数，right_num可正可负，默认为1
     async def change_right_num(self, user_id, right_num=1):
         current = await self.find_one_by_id(user_id)
-        current['right_num'] = current['right_num'] + right_num
+        current = {'right_num' : current['right_num'] + right_num}
         await self.update_one_by_id(user_id, current)
 
     # 根据id修改用户答对错数，wrong_num可正可负，默认为1
     async def change_wrong_num(self, user_id, wrong_num=1):
         current = await self.find_one_by_id(user_id)
-        current['wrong_num'] = current['wrong_num'] + wrong_num
+        current = {'wrong_num' : current['wrong_num'] + wrong_num}
         await self.update_one_by_id(user_id, current)
 
     # 根据id修改用户答题积分，delta可正可负
     async def change_score(self, user_id, delta):
         current = await self.find_one_by_id(user_id)
-        current['scores'] = current['scores'] + delta
+        current = {'scores' : current['scores'] + delta}
         await self.update_one_by_id(user_id, current)
 
     # GET /user
