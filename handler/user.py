@@ -9,7 +9,7 @@ import json
 class UserHandler(BaseHandler):
     async def get(self):
         my_id = await self.user_id
-        user_id = self.get_argument("user_id",default=my_id)
+        user_id = self.get_argument("user_id", default=my_id)
         result = await self.db.user.get_user_with_id(user_id)
         self.finish_success(result=result)
 
@@ -68,12 +68,12 @@ class UserHandler(BaseHandler):
 
 
     async def get_name(self,uuid):
-        data={
+        data = {
             'uuid':uuid
         }
         try:
             client = AsyncHTTPClient()
-            request= HTTPRequest(
+            request = HTTPRequest(
             USER_URL,
             method='POST',
             body=urllib.parse.urlencode(data),
