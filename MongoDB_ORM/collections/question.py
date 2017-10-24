@@ -14,13 +14,20 @@ class Question(CollectionBase):
 
     # GET /question
     async def get_question(self, question_id):
-        return await self.find_one_by_id(question_id)
+        result = await self.find_one_by_id(question_id)
+        result['read_num'] = result['read_num'] + 1
+        await self.update_one_by_id(question_id, result)
+        return result
 
     # POST /question
     async def post_question(self, category_id, question, user_id):
         question['category_id'] = category_id
         question['post_time'] = self.timestamp()
         question['user_id'] = user_id
+        question['read_num'] = 0
+        question['modify_time'] = self.timestamp()
+        question['modify_user_id'] = user_id
+        question['answer_count'] = 0
         await self.insert_one(question)
 
     # PUT /question

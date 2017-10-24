@@ -8,7 +8,7 @@ class sCategoryHandler(BaseHandler):
         @api {get} /categories/ 获取所有目录
         @apiName GetAllCategory
         @apiGroup Category
-
+        
         @apiSuccessExample {json} Success-Response:
         HTTP/1.1 200 OK
         {
@@ -43,7 +43,10 @@ class CategoryHandler(BaseHandler):
         @api {get} /category/ 获取目录信息
         @apiName GetCategory
         @apiGroup Category
-        
+        @apiParamExample {json} Request-Example:
+            {
+                "category_id":"1ad124bbf42"
+            }
         @apiParam {String} category_id 待检索目录id
         @apiSuccessExample {json} Success-Response:
         HTTP/1.1 200 OK
@@ -78,13 +81,19 @@ class CategoryHandler(BaseHandler):
         @api {post} /category/ 添加一个目录
         @apiName AddCategory
         @apiGroup Category
-
+    
         @apiPermission admin
         @apiParam {String} name 分类名称
         @apiParam {String} desc 分类简介
         @apiParam {String} icon 分类图标url
         @apiParam {Int} privilege 分类权限
-        
+        @apiParamExample {json} Request-Example:
+            {
+                "name":"光学",
+                "desc":"光学相关习题",
+                "icon":[url],
+                "privilege":1
+            }
         @apiError 401-AuthError 身份认证失败
         @apiError 404-PermissionDeniedError 需要管理员权限
     """
@@ -106,7 +115,16 @@ class CategoryHandler(BaseHandler):
         @apiPermission admin
         @apiParam {String} category_id 分类id
         @apiParam {json} category 修改信息
-
+        @apiParamExample {json} Request-Example:
+            {
+                "category_id":[category_id],
+                "category":{
+                    "name":"光学",
+                    "desc":"光学相关习题",
+                    "icon":[url],
+                    "privilege":1
+                    }
+            }        
         @apiError 401-AuthError 身份认证失败
         @apiError 404-PermissionDeniedError 需要管理员权限
     """
@@ -125,7 +143,10 @@ class CategoryHandler(BaseHandler):
 
         @apiPermission admin
         @apiParam {String} category_id 分类id
-
+        @apiParamExample {json} Request-Example:
+            {
+                "category_id":[category_id]
+            }
         @apiError 401-AuthError 身份认证失败
         @apiError 404-PermissionDeniedError 需要管理员权限
     """
@@ -136,7 +157,7 @@ class CategoryHandler(BaseHandler):
         await self.db.category.delete_category(category_id)
         self.finish_success(result='ok')
 
-routes.handlers +=[
-    (r'/categories',sCategoryHandler),
-    (r'/category',CategoryHandler)
+routes.handlers += [
+    (r'/categories', sCategoryHandler),
+    (r'/category', CategoryHandler)
 ]

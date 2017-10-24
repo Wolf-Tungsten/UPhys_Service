@@ -48,6 +48,8 @@ class CollectionBase(object):
 
     async def update_one_by_id(self, doc_id, doc):
         condition = {'_id': self.ObjectId(doc_id)}
+        if '_id' in doc:
+            doc.pop('_id')
         doc = {'$set': doc}
         await self.collection.update_one(condition, doc)
 
