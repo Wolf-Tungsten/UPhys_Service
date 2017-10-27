@@ -23,6 +23,11 @@ class BaseHandler(RequestHandler):
             return True
         return False
 
+    def finish(self, chunk=None):
+        self.set_header('Access-Control-Allow-Origin', '*')
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE')
+        super(BaseHandler, self).finish(chunk)
+
     def finish_success(self, **kwargs):
         rs = {
             'status': 'success',
@@ -38,6 +43,9 @@ class BaseHandler(RequestHandler):
             'result':list(kwargs.values())[0]
         }
         self.finish(json.dumps(rs))
+
+    def options(self):
+        self.finish()
 
     @property
     def json_body(self):
