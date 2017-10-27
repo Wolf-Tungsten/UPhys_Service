@@ -12,10 +12,11 @@ class Answer(CollectionBase):
         return await self.find_pages_by_condition(condition, sort, page, pagesize)
 
     # POST /answer
-    async def post_answer(self, question_id,answer, user_id):
+    async def post_answer(self, question_id, answer, user_id):
         answer['user_id'] = user_id
         answer['post_time'] = self.timestamp()
         answer['question_id'] = question_id
+        answer['modify_time'] = self.timestamp()
         await self.insert_one(answer)
 
     # PUT /answer
