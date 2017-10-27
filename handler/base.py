@@ -2,7 +2,6 @@ from tornado.web import RequestHandler
 from handler.handler_config import *
 from handler.exceptions import ArgsError,MissingArgumentError,PermissionDeniedError
 import json
-import IPython
 DEFAULT_TYPE = []
 
 class BaseHandler(RequestHandler):
@@ -55,7 +54,11 @@ class BaseHandler(RequestHandler):
 
     @property
     def token(self):
-        return self.get_cookie("token", default='')
+        headers = self.request.headers
+        token = None
+        if 'Access-Token' in headers:
+            token = headers['Access-Token']
+        return token
 
     @property
     def db(self):

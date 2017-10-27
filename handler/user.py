@@ -60,7 +60,9 @@ class UserHandler(BaseHandler):
     {
         "status": "success",
         "code": "200",
-        "result": "ok"
+        "result": {
+            "token": [身份令牌]
+            }
     }
     
     @apiError Error 401 AuthError 身份认证失败或获取用户名失败
@@ -77,7 +79,7 @@ class UserHandler(BaseHandler):
         else:
             token = user['token']
         self.set_cookie("token",token)
-        self.finish_success(result='ok')
+        self.finish_success(result={'token':token})
 
     """
     @api {put} /user 修改姓名|权限
