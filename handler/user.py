@@ -9,7 +9,7 @@ import json
 class UserHandler(BaseHandler):
 
     """
-    @api {get} /user/ 获取用户信息
+    @api {get} /user 获取用户信息
     @apiName GetUser
     @apiGroup User
     
@@ -46,7 +46,7 @@ class UserHandler(BaseHandler):
         self.finish_success(result=result)
 
     """
-    @api {post} /user/ 用户登录
+    @api {post} /user 用户登录
     @apiName AddUser
     @apiGroup User
 
@@ -80,7 +80,7 @@ class UserHandler(BaseHandler):
         self.finish_success(result='ok')
 
     """
-    @api {put} /user/ 修改姓名|权限
+    @api {put} /user 修改姓名|权限
     @apiName UpdateUser
     @apiGroup User
 
@@ -118,7 +118,7 @@ class UserHandler(BaseHandler):
         self.finish_success(result='ok')
 
     """
-    @api {delete} /user/ 删除用户信息
+    @api {delete} /user 删除用户信息
     @apiName DeleteUser
     @apiGroup User
     

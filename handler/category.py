@@ -5,7 +5,7 @@ import IPython
 
 class sCategoryHandler(BaseHandler):
     """
-        @api {get} /categories/ 获取所有目录
+        @api {get} /categories 获取所有目录
         @apiName GetAllCategory
         @apiGroup Category
         
@@ -40,7 +40,7 @@ class sCategoryHandler(BaseHandler):
 
 class CategoryHandler(BaseHandler):
     """
-        @api {get} /category/ 获取目录信息
+        @api {get} /category 获取目录信息
         @apiName GetCategory
         @apiGroup Category
         @apiParamExample {json} Request-Example:
@@ -78,7 +78,7 @@ class CategoryHandler(BaseHandler):
         self.finish_success(result=result)
 
     """
-        @api {post} /category/ 添加一个目录
+        @api {post} /category 添加一个目录
         @apiName AddCategory
         @apiGroup Category
     
@@ -108,7 +108,7 @@ class CategoryHandler(BaseHandler):
         self.finish_success(result='ok')
 
     """
-        @api {put} /category/ 修改目录信息
+        @api {put} /category 修改目录信息
         @apiName EditCategory
         @apiGroup Category
 
@@ -137,7 +137,7 @@ class CategoryHandler(BaseHandler):
         self.finish_success(result='ok')
 
     """
-        @api {delete} /category/ 删除目录信息
+        @api {delete} /category 删除目录信息
         @apiName DeleteCategory
         @apiGroup Category
 

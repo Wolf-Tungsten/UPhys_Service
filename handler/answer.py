@@ -4,7 +4,7 @@ from handler.exceptions import PermissionDeniedError
 
 class sAnswerHandler(BaseHandler):
     """
-        @api {get} /answers/ 获取题目所有回答
+        @api {get} /answers 获取题目所有回答
         @apiName GetAllAnswers
         @apiGroup Answer
 
@@ -65,7 +65,7 @@ class sAnswerHandler(BaseHandler):
 
 class AnswerHandler(BaseHandler):
     """
-        @api {post} /answer/ 提交回答
+        @api {post} /answer 提交回答
         @apiName AddAnswer
         @apiGroup Answer
 
@@ -106,7 +106,7 @@ class AnswerHandler(BaseHandler):
         await self.db.user.change_exp(user_id, 20)
         self.finish_success(result='ok')
     """
-        @api {put} /answer/ 修改回答
+        @api {put} /answer 修改回答
         @apiName ModifyAnswer
         @apiGroup Answer
 
@@ -145,7 +145,7 @@ class AnswerHandler(BaseHandler):
         self.finish_success(result='ok')
 
     """
-        @api {delete} /answer/ 删除回答
+        @api {delete} /answer 删除回答
         @apiName DeleteAnswer
         @apiGroup Answer
         @apiPermission admin

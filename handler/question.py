@@ -4,7 +4,7 @@ from handler.exceptions import PermissionDeniedError
 
 class sQuestionHandler(BaseHandler):
     """
-        @api {get} /questions/ 获取分类下题目
+        @api {get} /questions 获取分类下题目
         @apiName GetAllQuestion
         @apiGroup Question
         
@@ -63,7 +63,7 @@ class sQuestionHandler(BaseHandler):
 
 class QuestionHandler(BaseHandler):
     """
-        @api {get} /question/ 根据id获取题目
+        @api {get} /question 根据id获取题目
         @apiName GetQuestion
         @apiGroup Question
 
@@ -104,7 +104,7 @@ class QuestionHandler(BaseHandler):
         list.update({"answer_count": answer_count})
         self.finish_success(result=list)
     """
-        @api {post} /question/ 添加题目
+        @api {post} /question 添加题目
         @apiName AddQuestion
         @apiGroup Question
 
@@ -147,7 +147,7 @@ class QuestionHandler(BaseHandler):
         await self.db.user.change_exp(user_id, 10)
         self.finish_success(result='ok')
     """
-        @api {put} /question/ 修改题目
+        @api {put} /question 修改题目
         @apiName ModifyQuestion
         @apiGroup Question
 
@@ -186,7 +186,7 @@ class QuestionHandler(BaseHandler):
         self.finish_success(result='ok')
 
     """
-        @api {delete} /question/ 删除题目
+        @api {delete} /question 删除题目
         @apiName DeleteQuestion
         @apiGroup Question
         @apiPermission admin
