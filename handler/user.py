@@ -60,7 +60,9 @@ class UserHandler(BaseHandler):
     {
         "status": "success",
         "code": "200",
-        "result": "ok"
+        "result": {
+            "token": [身份令牌]
+            }
     }
     
     @apiError Error 401 AuthError 身份认证失败或获取用户名失败
