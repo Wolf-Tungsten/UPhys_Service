@@ -24,7 +24,7 @@ class UserHandler(BaseHandler):
         else:
             token = user['token']
         self.set_cookie("token",token)
-        self.finish_success(result='ok')
+        self.finish_success(result={'token':token})
 
     async def put(self):
         if not await self.is_admin:
