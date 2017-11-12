@@ -23,9 +23,15 @@ class BaseHandler(RequestHandler):
             return True
         return False
 
+    def set_default_headers(self):
+        self.set_header("Access-Control-Allow-Origin", "*")
+        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
+        self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE')
+
     def finish(self, chunk=None):
-        self.set_header('Access-Control-Allow-Origin', '*')
-        self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE')
+        # self.set_header('Access-Control-Allow-Origin', '*')
+        # self.set_header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE')
+        # self.set_header('Access-Control-Allow-Headers', 'Access-Token')
         super(BaseHandler, self).finish(chunk)
 
     def finish_success(self, **kwargs):

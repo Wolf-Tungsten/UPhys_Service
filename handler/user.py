@@ -2,7 +2,7 @@ from handler.base import BaseHandler
 import routes
 from handler.exceptions import PermissionDeniedError,AuthError
 from tornado.httpclient import AsyncHTTPClient,HTTPRequest,HTTPError
-from handler.config import CONNECT_TIME_OUT,AUTH_URL,USER_URL
+from config import CONNECT_TIME_OUT,AUTH_URL,USER_URL
 import urllib.parse
 import json
 
