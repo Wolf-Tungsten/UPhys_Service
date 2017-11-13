@@ -25,7 +25,7 @@ class BaseHandler(RequestHandler):
 
     def set_default_headers(self):
         self.set_header("Access-Control-Allow-Origin", "*")
-        self.set_header("Access-Control-Allow-Headers", "x-requested-with")
+        self.set_header("Access-Control-Allow-Headers", "Access-Token, Content-Type")
         self.set_header('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE')
 
     def finish(self, chunk=None):
@@ -95,13 +95,16 @@ class BaseHandler(RequestHandler):
             return str(self._user_info['_id'])
 
     def get_argument(self, name, default=DEFAULT_TYPE, strip=True):
-        if name in self.json_body:
-            rs = self.json_body[name]
-            return rs
-        elif default is DEFAULT_TYPE:
-            raise MissingArgumentError(name)
+        if self.json_body:
+            if name in self.json_body:
+                rs = self.json_body[name]
+                return rs
+            elif default is DEFAULT_TYPE:
+                raise MissingArgumentError(name)
+            else:
+                return default
         else:
-            return default
+            return super(BaseHandler, self).get_argument(name, default, strip)
 
     @property
     async def answer_allow(self):
