@@ -52,8 +52,8 @@ class sQuestionHandler(BaseHandler):
     """
     async def get(self):
         category_id = self.get_argument("category_id")
-        page = self.get_argument("page")
-        pagesize = self.get_argument("pagesize")
+        page = int(self.get_argument("page"))
+        pagesize = int(self.get_argument("pagesize"))
         privilege = await self.privilege
         question_privilege = await self.db.category.get_privilege(category_id)
         if question_privilege > privilege:

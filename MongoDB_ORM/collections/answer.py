@@ -7,6 +7,8 @@ class Answer(CollectionBase):
 
     # GET /answers
     async def get_answers(self, question_id, page, pagesize):
+        page = int(page)
+        pagesize = int(pagesize)
         condition = {'question_id': question_id}
         sort = [('post_time',self.DESCENDING)]
         return await self.find_pages_by_condition(condition, sort, page, pagesize)

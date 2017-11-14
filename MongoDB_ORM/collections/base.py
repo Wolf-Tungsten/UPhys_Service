@@ -10,6 +10,7 @@ class CollectionBase(object):
         self.collection = db[collection_name]
         self.ASCENDING = pymongo.ASCENDING
         self.DESCENDING = pymongo.DESCENDING
+        self.db = db  # 为了让集合之间可以交错，虽然我表示很不舒服
 
     def ObjectId(self, doc_id):
         return bson.objectid.ObjectId(doc_id)
@@ -34,6 +35,8 @@ class CollectionBase(object):
         return result
 
     async def find_pages_by_condition(self, condition, sort, page, pagesize):
+        page = int(page)
+        pagesize = int(pagesize)
         limit = pagesize
         skip = (page - 1) * pagesize
         cursor = self.collection.find(condition, limit=limit, skip=skip, sort=sort)

@@ -56,8 +56,8 @@ class sAnswerHandler(BaseHandler):
     """
     async def get(self):
         question_id = self.get_argument("question_id")
-        page = self.get_argument("page")
-        pagesize = self.get_argument("pagesize")
+        page = int(self.get_argument("page"))
+        pagesize = int(self.get_argument("pagesize"))
         if not await self.question_allow:
             raise PermissionDeniedError("没有访问权限")
         list = await self.db.answer.get_answers(question_id,page,pagesize)
