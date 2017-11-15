@@ -28,6 +28,7 @@ class Question(CollectionBase):
     # GET /question
     async def get_question(self, question_id):
         result = await self.find_one_by_id(question_id)
+        question_id = str(result['_id'])
         user_id = result['user_id']
         user_id = self.ObjectId(user_id)
         user_condition = {'_id': user_id}
@@ -35,13 +36,14 @@ class Question(CollectionBase):
         user_name = user_info['name']
         category_id = result['category_id']
         category_id = self.ObjectId(category_id)
-        category_condition = {'_id':category_id}
+        category_condition = {'_id': category_id}
         category_info = await self.db['category'].find_one(category_condition)
         category_name = category_info['name']
         result['read_num'] = result['read_num'] + 1
         await self.update_one_by_id(question_id, result)
         result['user_name'] = user_name
         result['category_name'] = category_name
+        result['_id'] = question_id
         return result
 
     # POST /question

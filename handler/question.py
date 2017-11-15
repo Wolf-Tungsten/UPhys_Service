@@ -32,18 +32,10 @@ class sQuestionHandler(BaseHandler):
                 'modify_user_id': '',  # 问题最后修改者
                 'modify_time': 0.0,  # 问题最后修改时间
                 'category_id': ''  # 问题所在category_id
+                'user_name':'',  # 问题发布者用户名
+                'category_name': ''  # 问题所在分类名称
             },
-            {
-                'title': '',  # 问题标题
-                'content': '',  # 问题内容
-                'images': [],  # 问题所包含图片url列表
-                'read_num': 0,  # 问题阅读量
-                'user_id': '',  # 问题发布者
-                'post_time': 0.0,  # 问题发布时间
-                'modify_user_id': '',  # 问题最后修改者
-                'modify_time': 0.0,  # 问题最后修改时间
-                'category_id': ''  # 问题所在category_id
-            }]
+            ...]
         }
 
         @apiError 401-AuthError 身份认证失败
@@ -83,6 +75,7 @@ class QuestionHandler(BaseHandler):
                 'images': [],  # 问题所包含图片url列表
                 'read_num': 0,  # 问题阅读量
                 'user_id': '',  # 问题发布者
+                'user_name':'',  # 问题发布者用户名
                 'post_time': 0.0,  # 问题发布时间
                 'modify_user_id': '',  # 问题最后修改者
                 'modify_time': 0.0,  # 问题最后修改时间

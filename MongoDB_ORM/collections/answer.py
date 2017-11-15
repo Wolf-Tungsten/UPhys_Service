@@ -11,7 +11,15 @@ class Answer(CollectionBase):
         pagesize = int(pagesize)
         condition = {'question_id': question_id}
         sort = [('post_time',self.DESCENDING)]
-        return await self.find_pages_by_condition(condition, sort, page, pagesize)
+        result = await self.find_pages_by_condition(condition, sort, page, pagesize)
+        for answer in result:
+            user_id = answer['user_id']
+            user_id = self.ObjectId(user_id)
+            user_condition = {'_id': user_id}
+            user_info = await self.db['user'].find_one(user_condition)
+            user_name = user_info['name']
+            answer['user_name'] = user_name
+        return result
 
     # POST /answer
     async def post_answer(self, question_id, answer, user_id):
