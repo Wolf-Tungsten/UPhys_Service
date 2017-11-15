@@ -11,6 +11,13 @@ class CollectionBase(object):
         self.ASCENDING = pymongo.ASCENDING
         self.DESCENDING = pymongo.DESCENDING
         self.db = db  # 为了让集合之间可以交错，虽然我表示很不舒服
+        self.default = {}
+
+    def get_default(self):
+        default = {}
+        for k in self.default:
+            default[k] = self.default[k]
+        return default
 
     def ObjectId(self, doc_id):
         return bson.objectid.ObjectId(doc_id)
@@ -28,6 +35,14 @@ class CollectionBase(object):
 
     async def find_all(self):
         cursor = self.collection.find({})
+        result = []
+        async for doc in cursor:
+            doc['_id'] = str(doc['_id'])
+            result.append(doc)
+        return result
+
+    async def find_by_condition(self, condition):
+        cursor = self.collection.find(condition)
         result = []
         async for doc in cursor:
             doc['_id'] = str(doc['_id'])
@@ -52,7 +67,7 @@ class CollectionBase(object):
     async def update_one_by_id(self, doc_id, doc):
         condition = {'_id': self.ObjectId(doc_id)}
         if '_id' in doc:
-            doc.pop('_id')
+            doc.pop('_id') #  !!存在隐患
         doc = {'$set': doc}
         await self.collection.update_one(condition, doc)
 
@@ -60,5 +75,13 @@ class CollectionBase(object):
         condition = {'_id': self.ObjectId(doc_id)}
         await self.collection.delete_one(condition)
 
+    async def delete_by_condition(self, condition):
+        await self.collection.delete_many(condition)
+
     async def get_count_by_condition(self, condition):
         return await self.collection.find(condition).count()
+
+    async def user_info(self, user_id):
+        user_id = self.ObjectId(user_id)
+        condition = {'_id': user_id}
+        return await self.db['user'].find_one(condition)
