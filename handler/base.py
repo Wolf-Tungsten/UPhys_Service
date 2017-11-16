@@ -45,8 +45,8 @@ class BaseHandler(RequestHandler):
     def finish_err(self, **kwargs):
         rs = {
             'status': 'success',
-            'code':'0',
-            'result':list(kwargs.values())[0]
+            'code': '0',
+            'result': list(kwargs.values())[0]
         }
         self.finish(json.dumps(rs))
 

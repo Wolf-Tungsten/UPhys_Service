@@ -34,6 +34,8 @@ class sAnswerHandler(BaseHandler):
                 'post_time': 0.0,  # 发布时间
                 'modify_user_id': '',  # 最后修改者id
                 'modify_time': 0.0  # 最后修改时间
+                'upvote_count': 0 # 支持者人数
+                'downvote_count': 0 # 反对者人数
             },
             {
                 '_id':[回答id],
@@ -47,6 +49,8 @@ class sAnswerHandler(BaseHandler):
                 'post_time': 0.0,  # 发布时间
                 'modify_user_id': '',  # 最后修改者id
                 'modify_time': 0.0  # 最后修改时间
+                'upvote_count': 0 # 支持者人数
+                'downvote_count': 0 # 反对者人数
             }]
         }
 
@@ -61,9 +65,69 @@ class sAnswerHandler(BaseHandler):
         if not await self.question_allow:
             raise PermissionDeniedError("没有访问权限")
         list = await self.db.answer.get_answers(question_id,page,pagesize)
+        for answer in list:
+            answer_id = answer['_id']
+            user_info = await self.user_info
+            answer['user_name'] = user_info['name']
+            answer['upvote_count'] = await self.db.vote.get_up_vote_count(answer_id)
+            answer['downvote_count'] = await self.db.vote.get_down_vote_count(answer_id)
         self.finish_success(result=list)
 
 class AnswerHandler(BaseHandler):
+
+    """
+        @api {get} /answer 获取单个回答
+        @apiName GetAnswer
+        @apiGroup Answer
+
+        @apiParam {String} answer_id 答案id
+        @apiParamExample {urlparams} Request-Example:
+            {
+                "answer_id": [回答id]
+            }
+        @apiSuccessExample {json} Success-Response:
+        HTTP/1.1 200 OK
+        {
+            "status": "success",
+            "code": "200",
+            "result": {
+                '_id':[回答id],
+                'title': '',  # 回答标题
+                'content': '',  # 回答内容
+                'images': '',  # 回答包含图片url列表
+                'question_id': '',  # 回答所属问题id
+                'likes': [],  # 回答支持者id列表
+                'dislikes': [],  # 回答反对者id列表
+                'user_id': '',  # 发布者user_id
+                'post_time': 0.0,  # 发布时间
+                'modify_user_id': '',  # 最后修改者id
+                'modify_time': 0.0  # 最后修改时间
+                'upvote_count': 0 # 支持者人数
+                'downvote_count': 0 # 反对者人数
+                'upvote_list': [] # 支持列表
+                'downvote_list': [] # 反对列表
+            }
+        }
+
+        @apiError 401-AuthError 身份认证失败
+        @apiError 404-PermissionDeniedError 没有访问权限
+
+    """
+    async def get(self):
+        answer_id = self.get_argument("answer_id")
+        if not await self.answer_allow:
+            raise PermissionDeniedError("没有访问权限")
+        answer = await self.db.answer.get_answer(answer_id)
+        answer_id = answer['_id']
+        user_info = await self.user_info
+        answer['user_name'] = user_info['name']
+        answer['upvote_count'] = await self.db.vote.get_up_vote_count(answer_id)
+        answer['downvote_count'] = await self.db.vote.get_down_vote_count(answer_id)
+        answer['upvote_list'] = await self.db.vote.get_up_vote_list(answer_id)
+        answer['downvote_list'] = await self.db.vote.get_down_vote_list(answer_id)
+        self.finish_success(result=answer)
+
+
     """
         @api {post} /answer 提交回答
         @apiName AddAnswer
@@ -176,12 +240,12 @@ class AnswerHandler(BaseHandler):
         await self.db.user.change_exp(user_id,-20)
         self.finish_success(result='ok')
 
-class VoteHandler(BaseHandler):
+class VoteHandler_d(BaseHandler):
     """
         @api {post} /answer/vote 给答案打call
         @apiName VoteAnswer
         @apiGroup Answer
-
+        @apiDeprecated use now (#Vote:UpVote)
         @apiParam {String} answer_id 问题id
 
         @apiParamExample {json} Request-Example:
@@ -213,7 +277,7 @@ class VoteHandler(BaseHandler):
         @api {delete} /answer/vote 取消投票
         @apiName DeleteVoteAnswer
         @apiGroup Answer
-
+        @apiDeprecated use now (#Vote:DownVote)
         @apiParam {String} answer_id 问题id
 
         @apiParamExample {json} Request-Example:
@@ -245,5 +309,5 @@ class VoteHandler(BaseHandler):
 routes.handlers +=[
     (r'/answers',sAnswerHandler),
     (r'/answer',AnswerHandler),
-    (r'/answer/vote',VoteHandler)
+    (r'/answer/vote',VoteHandler_d)
 ]

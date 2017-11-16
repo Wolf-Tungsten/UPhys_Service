@@ -5,6 +5,10 @@ class Answer(CollectionBase):
     def __init__(self, db):
         CollectionBase.__init__(self, db, 'answer')
 
+    # GET /answer
+    async def get_answer(self, answer_id):
+        return await self.find_one_by_id(answer_id)
+
     # GET /answers
     async def get_answers(self, question_id, page, pagesize):
         page = int(page)

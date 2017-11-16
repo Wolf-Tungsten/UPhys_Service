@@ -11,6 +11,22 @@ class Vote(CollectionBase):
             'user_name': ''
         }
 
+    async def is_up_voted(self, answer_id, user_id):
+        condition = {'answer_id': answer_id, 'user_id': user_id, 'vote': True}
+        counter = await self.get_count_by_condition(condition)
+        if counter > 0:
+            return True
+        else:
+            return False
+
+    async def is_down_voted(self, answer_id, user_id):
+        condition = {'answer_id': answer_id, 'user_id': user_id, 'vote': False}
+        counter = await self.get_count_by_condition(condition)
+        if counter > 0:
+            return True
+        else:
+            return False
+
     async def get_up_vote_count(self, answer_id):
         condition = {'answer_id': answer_id, 'vote': True}
         return await self.get_count_by_condition(condition)

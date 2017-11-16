@@ -1,9 +1,9 @@
 {
   "name": "UPhys_Service",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "格物东南后端服务",
   "title": "格物东南 后端接口文档",
-  "url": "http://v3.myseu.cn:6280/uphyserv",
+  "url": "https://www.heraldstudio.com/uphysrv",
   "header": {
     "title": "约定",
     "filename": "doc_header.md"
