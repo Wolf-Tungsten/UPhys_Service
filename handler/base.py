@@ -4,6 +4,12 @@ from handler.exceptions import ArgsError,MissingArgumentError,PermissionDeniedEr
 import json
 DEFAULT_TYPE = []
 
+no_privilege = 0
+user_privilege = 1
+admin_privilege = 2
+super_admin_privilege = 3
+
+
 class BaseHandler(RequestHandler):
 
     # 获取权限
@@ -11,6 +17,8 @@ class BaseHandler(RequestHandler):
     async def privilege(self):
         if not await self.user_info:
             return no_privilege
+        if self._user_info['isSuperAdmin']:
+            return super_admin_privilege
         if self._user_info['isAdmin']:
             return admin_privilege
         return user_privilege
@@ -19,7 +27,15 @@ class BaseHandler(RequestHandler):
     @property
     async def is_admin(self):
         privilege = await self.privilege
-        if privilege == admin_privilege:
+        if privilege >= admin_privilege:
+            return True
+        return False
+
+    # 鉴定超级管理员
+    @property
+    async def is_super_admin(self):
+        privilege = await self.privilege
+        if privilege >= super_admin_privilege:
             return True
         return False
 

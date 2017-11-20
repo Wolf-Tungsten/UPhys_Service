@@ -67,6 +67,10 @@ class Question(CollectionBase):
     async def delete_question(self, question_id):
         await self.delete_one_by_id(question_id)
 
+    async def delete_by_category(self, category_id):
+        condition = {'category_id': category_id}
+        await self.delete_by_condition(condition)
+
     async def get_question_category_id(self, question_id):
         question = await self.find_one_by_id(question_id)
         if question is not None:

@@ -49,6 +49,7 @@ class Vote(CollectionBase):
         condition = {'answer_id': answer_id, 'user_id': user_id, 'vote': True}
         count = await self.get_count_by_condition(condition)
         if count >= 1:
+            await self.cancel_vote(answer_id, user_id)
             return False
         else:
             new_doc = self.get_default()
@@ -57,11 +58,21 @@ class Vote(CollectionBase):
             user_info = await self.user_info(user_id)
             new_doc['user_name'] = user_info['name']
             await self.insert_one(new_doc)
+            current_upvote = await self.get_up_vote_count(answer_id)
+            current_downvote = await self.get_down_vote_count(answer_id)
+            condition = {'_id':self.ObjectId(answer_id)}
+            set = {'$set':{'vote_number':current_upvote-current_downvote}}
+            await self.db['answer'].update_one(condition, set)
             return True
 
     async def cancel_vote(self, answer_id, user_id):
         condition = {'answer_id': answer_id, 'user_id': user_id}
         await self.delete_by_condition(condition)
+        condition = {'_id': self.ObjectId(answer_id)}
+        current_upvote = await self.get_up_vote_count(answer_id)
+        current_downvote = await self.get_down_vote_count(answer_id)
+        set = {'$set': {'vote_number': current_upvote - current_downvote}}
+        await self.db['answer'].update_one(condition, set)
 
     async def down_vote(self, answer_id, user_id):
         condition = {'answer_id': answer_id, 'user_id': user_id, 'vote': True}
@@ -69,6 +80,7 @@ class Vote(CollectionBase):
         condition = {'answer_id': answer_id, 'user_id': user_id, 'vote': False}
         count = await self.get_count_by_condition(condition)
         if count >= 1:
+            await self.cancel_vote(answer_id, user_id)
             return False
         else:
             new_doc = self.get_default()
@@ -78,6 +90,11 @@ class Vote(CollectionBase):
             new_doc['user_name'] = user_info['name']
             new_doc['vote'] = False
             await self.insert_one(new_doc)
+            current_upvote = await self.get_up_vote_count(answer_id)
+            current_downvote = await self.get_down_vote_count(answer_id)
+            condition = {'_id': self.ObjectId(answer_id)}
+            set = {'$set': {'vote_number': current_upvote - current_downvote}}
+            await self.db['answer'].update_one(condition, set)
             return True
 
 

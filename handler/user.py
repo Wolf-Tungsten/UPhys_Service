@@ -71,15 +71,21 @@ class UserHandler(BaseHandler):
     async def post(self):
         cardnum = self.get_argument("cardnum")
         password = self.get_argument("password")
-        uuid = await self.check_password(cardnum,password)
-        user = await self.db.user.query_user_by_cardnum(cardnum)
-        if not user:
-            name = await self.get_name(uuid)
-            token = await self.db.user.create_new_user(cardnum,name)
-        else:
+        # 对于特殊用户从这里短路认证接口
+        user = await self.db.user.query_user_by_password(cardnum, password)
+        if user is not None:
             token = user['token']
-        self.set_cookie("token",token)
-        self.finish_success(result={'token':token})
+            self.finish_success(result={'token': token})
+        else:
+            uuid = await self.check_password(cardnum,password)
+            user = await self.db.user.query_user_by_cardnum(cardnum)
+            if not user:
+                name = await self.get_name(uuid)
+                token = await self.db.user.create_new_user(cardnum,name)
+            else:
+                token = user['token']
+            # self.set_cookie("token",token)
+            self.finish_success(result={'token':token})
 
     """
     @api {put} /user 修改姓名|权限
@@ -187,6 +193,7 @@ class UserHandler(BaseHandler):
             return response['content']['name']
         except HTTPError:
             raise AuthError("未能获取用户名")
+
 
 
 routes.handlers +=[

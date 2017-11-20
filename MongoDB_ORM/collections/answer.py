@@ -7,14 +7,21 @@ class Answer(CollectionBase):
 
     # GET /answer
     async def get_answer(self, answer_id):
-        return await self.find_one_by_id(answer_id)
+        answer = await self.find_one_by_id(answer_id)
+        user_id = answer['user_id']
+        user_id = self.ObjectId(user_id)
+        user_condition = {'_id': user_id}
+        user_info = await self.db['user'].find_one(user_condition)
+        user_name = user_info['name']
+        answer['user_name'] = user_name
+        return answer
 
     # GET /answers
     async def get_answers(self, question_id, page, pagesize):
         page = int(page)
         pagesize = int(pagesize)
         condition = {'question_id': question_id}
-        sort = [('post_time',self.DESCENDING)]
+        sort = [('vote_number', self.DESCENDING)]
         result = await self.find_pages_by_condition(condition, sort, page, pagesize)
         for answer in result:
             user_id = answer['user_id']
@@ -37,6 +44,13 @@ class Answer(CollectionBase):
     async def put_answer(self, answer_id, answer, user_id):
         answer['modify_user_id'] = user_id
         answer['modify_time'] = self.timestamp()
+        default = self.get_default()
+        bun = []
+        for k in answer:
+            if k not in default:
+                bun.append(k)
+        for k in bun:
+            answer.pop(k)
         await self.update_one_by_id(answer_id, answer)
 
     # DELETE /answer
@@ -75,9 +89,13 @@ class Answer(CollectionBase):
             return answer['user_id']
         return answer
 
-    async def get_answer_count(self,question_id):
-        condition = {"question_id":question_id}
+    async def get_answer_count(self, question_id):
+        condition = {"question_id": question_id}
         return await self.get_count_by_condition(condition)
+
+    async def delete_by_question(self, question_id):
+        condition = {"question_id": question_id}
+        await self.delete_by_condition(condition)
 
     def get_default(self):
         answer = {
@@ -90,6 +108,8 @@ class Answer(CollectionBase):
                 'user_id': '',  # 发布者user_id
                 'post_time': 0.0,  # 发布时间
                 'modify_user_id': '',  # 最后修改者id
-                'modify_time': 0.0  # 最后修改时间
+                'modify_time': 0.0,  # 最后修改时间
+                'vote_number': 0  # 回答的赞数-踩数
         }
         return answer
+

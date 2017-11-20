@@ -51,6 +51,10 @@ class sQuestionHandler(BaseHandler):
         if question_privilege > privilege:
             raise PermissionDeniedError("没有访问权限")
         list = await self.db.question.get_questions(category_id,page,pagesize)
+        for question in list:
+            question_id = question['_id']
+            answer_count = await self.db.answer.get_answer_count(question_id)
+            question["answer_count"] = answer_count
         self.finish_success(result=list)
 
 class QuestionHandler(BaseHandler):
@@ -92,10 +96,10 @@ class QuestionHandler(BaseHandler):
         if not await self.question_allow:
             raise PermissionDeniedError("没有访问权限")
         question_id = self.get_argument("question_id")
-        list = await self.db.question.get_question(question_id)
+        question = await self.db.question.get_question(question_id)
         answer_count = await self.db.answer.get_answer_count(question_id)
-        list.update({"answer_count": answer_count})
-        self.finish_success(result=list)
+        question['answer_count'] = answer_count
+        self.finish_success(result=question)
     """
         @api {post} /question 添加题目
         @apiName AddQuestion
@@ -206,7 +210,8 @@ class QuestionHandler(BaseHandler):
         question_id = self.get_argument("question_id")
         user_id = await self.db.question.get_user_id(question_id)
         await self.db.question.delete_question(question_id)
-        await self.db.user.change_exp(user_id,-10)
+        await self.db.user.change_exp(user_id, -10)
+        await self.db.answer.delete_by_question(question_id)
         self.finish_success(result='ok')
 
 routes.handlers += [

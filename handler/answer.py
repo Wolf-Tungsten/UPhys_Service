@@ -20,38 +20,28 @@ class sAnswerHandler(BaseHandler):
         @apiSuccessExample {json} Success-Response:
         HTTP/1.1 200 OK
         {
-            "status": "success",
-            "code": "200",
-            "result": [{
-                '_id':[回答id],
-                'title': '',  # 回答标题
-                'content': '',  # 回答内容
-                'images': '',  # 回答包含图片url列表
-                'question_id': '',  # 回答所属问题id
-                'likes': [],  # 回答支持者id列表
-                'dislikes': [],  # 回答反对者id列表
-                'user_id': '',  # 发布者user_id
-                'post_time': 0.0,  # 发布时间
-                'modify_user_id': '',  # 最后修改者id
-                'modify_time': 0.0  # 最后修改时间
-                'upvote_count': 0 # 支持者人数
-                'downvote_count': 0 # 反对者人数
-            },
-            {
-                '_id':[回答id],
-                'title': '',  # 回答标题
-                'content': '',  # 回答内容
-                'images': '',  # 回答包含图片url列表
-                'question_id': '',  # 回答所属问题id
-                'likes': [],  # 回答支持者id列表
-                'dislikes': [],  # 回答反对者id列表
-                'user_id': '',  # 发布者user_id
-                'post_time': 0.0,  # 发布时间
-                'modify_user_id': '',  # 最后修改者id
-                'modify_time': 0.0  # 最后修改时间
-                'upvote_count': 0 # 支持者人数
-                'downvote_count': 0 # 反对者人数
-            }]
+        "status": "success",
+        "code": "200",
+        "result": {
+            "_id": "5a0cd7d2ee3cf828eedcb7c4",
+            "title": "",
+            "content": "穿了！",
+            "images": [],
+            "question_id": "5a0b0acbee3cf80f6f0c9212",
+            "likes": [
+                "5a09d175ee3cf8026b9edfe8"
+            ],
+            "dislikes": [
+                "5a08f22a7c193b2fef2cb63d"
+            ],
+            "user_id": "5a09dxxxxx",
+            "post_time": 1510791122,
+            "modify_user_id": "",
+            "modify_time": 1510791122,
+            "user_name": "高睿昊",
+            "upvote_count": 0,
+            "downvote_count": 1
+        }
         }
 
         @apiError 401-AuthError 身份认证失败
@@ -67,10 +57,10 @@ class sAnswerHandler(BaseHandler):
         list = await self.db.answer.get_answers(question_id,page,pagesize)
         for answer in list:
             answer_id = answer['_id']
-            user_info = await self.user_info
-            answer['user_name'] = user_info['name']
             answer['upvote_count'] = await self.db.vote.get_up_vote_count(answer_id)
             answer['downvote_count'] = await self.db.vote.get_down_vote_count(answer_id)
+            answer['is_upvoted'] = await self.db.vote.is_up_voted(answer_id, await self.user_id)
+            answer['is_downvoted'] = await self.db.vote.is_down_voted(answer_id, await self.user_id)
         self.finish_success(result=list)
 
 class AnswerHandler(BaseHandler):
@@ -104,8 +94,17 @@ class AnswerHandler(BaseHandler):
                 'modify_time': 0.0  # 最后修改时间
                 'upvote_count': 0 # 支持者人数
                 'downvote_count': 0 # 反对者人数
-                'upvote_list': [] # 支持列表
-                'downvote_list': [] # 反对列表
+                'user_name':'' # 回答者用户名
+                "upvote_list": [],
+                "downvote_list": [
+                    {
+                        "_id": "5a0xxxxx",
+                        "answer_id": "5a0xxxxx",
+                        "user_id": "5a0xxxx",
+                        "vote": false,
+                        "user_name": "高睿昊"
+                    }
+                ]
             }
         }
 
@@ -119,12 +118,12 @@ class AnswerHandler(BaseHandler):
             raise PermissionDeniedError("没有访问权限")
         answer = await self.db.answer.get_answer(answer_id)
         answer_id = answer['_id']
-        user_info = await self.user_info
-        answer['user_name'] = user_info['name']
         answer['upvote_count'] = await self.db.vote.get_up_vote_count(answer_id)
         answer['downvote_count'] = await self.db.vote.get_down_vote_count(answer_id)
         answer['upvote_list'] = await self.db.vote.get_up_vote_list(answer_id)
         answer['downvote_list'] = await self.db.vote.get_down_vote_list(answer_id)
+        answer['is_upvoted'] = await self.db.vote.is_up_voted(answer_id, await self.user_id)
+        answer['is_downvoted'] = await self.db.vote.is_down_voted(answer_id, await self.user_id)
         self.finish_success(result=answer)
 
 
@@ -271,7 +270,7 @@ class VoteHandler_d(BaseHandler):
             raise PermissionDeniedError("没有访问权限")
         await self.db.answer.post_answer_vote(answer_id,user_id)
         user_id = await self.db.answer.get_user_id(answer_id)
-        await self.db.user.change_exp(user_id,1)
+        await self.db.user.change_exp(user_id, 1)
         self.finish_success(result='ok')
     """
         @api {delete} /answer/vote 取消投票
@@ -303,7 +302,7 @@ class VoteHandler_d(BaseHandler):
             raise PermissionDeniedError("没有访问权限")
         await self.db.answer.delete_answer_vote(answer_id,user_id)
         user_id = await self.db.answer.get_user_id(answer_id)
-        await self.db.user.change_exp(user_id,-1)
+        await self.db.user.change_exp(user_id, -1)
         self.finish_success(result='ok')
 
 routes.handlers +=[

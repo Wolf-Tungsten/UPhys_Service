@@ -36,6 +36,10 @@ class sCategoryHandler(BaseHandler):
     async def get(self):
         privilege = await self.privilege
         list = await self.db.category.get_categories(privilege)
+        for category in list:
+            category_id = category['_id']
+            question_count = await self.db.question.get_question_count(category_id)
+            category['question_count'] = question_count
         self.finish_success(result=list)
 
 class CategoryHandler(BaseHandler):
@@ -72,7 +76,7 @@ class CategoryHandler(BaseHandler):
         result = await self.db.category.get_category(category_id, privilege)
         question_count = await self.db.question.get_question_count(category_id)
         if result is not None:
-            result.update({"question_count": question_count})
+            result['question_count'] = question_count
         else:
             raise ResourceNotExistError('没有对应id的目录')
         self.finish_success(result=result)
@@ -131,9 +135,15 @@ class CategoryHandler(BaseHandler):
     async def put(self):
         if not await self.is_admin:
             raise PermissionDeniedError("需要管理员权限")
-        category_id = self.get_argument("category_id")
-        category = self.get_argument("category")
-        await self.db.category.put_category(category_id,category)
+        is_sort = self.get_argument('sort', False)
+        if is_sort:
+            id1 = self.get_argument('category_id_1')
+            id2 = self.get_argument('category_id_2')
+            await self.db.category.sort(id1,id2)
+        else:
+            category_id = self.get_argument("category_id")
+            category = self.get_argument("category")
+            await self.db.category.put_category(category_id, category)
         self.finish_success(result='ok')
 
     """
@@ -148,13 +158,14 @@ class CategoryHandler(BaseHandler):
                 "category_id":[category_id]
             }
         @apiError 401-AuthError 身份认证失败
-        @apiError 404-PermissionDeniedError 需要管理员权限
+        @apiError 403-PermissionDeniedError 需要管理员权限
     """
     async def delete(self):
         if not await self.is_admin:
             raise PermissionDeniedError("需要管理员权限")
         category_id = self.get_argument("category_id")
         await self.db.category.delete_category(category_id)
+        await self.db.question.delete_by_category(category_id)
         self.finish_success(result='ok')
 
 routes.handlers += [

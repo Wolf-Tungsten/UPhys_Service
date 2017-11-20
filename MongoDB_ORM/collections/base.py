@@ -79,7 +79,7 @@ class CollectionBase(object):
         await self.collection.delete_many(condition)
 
     async def get_count_by_condition(self, condition):
-        return await self.collection.find(condition).count()
+        return await self.collection.count(condition)
 
     async def user_info(self, user_id):
         user_id = self.ObjectId(user_id)

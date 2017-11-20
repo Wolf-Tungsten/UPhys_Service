@@ -13,3 +13,4 @@ class ORM(object):
         self.question = Question(self.db)
         self.answer = Answer(self.db)
         self.vote = Vote(self.db)
+        self.user.check_super_admin()

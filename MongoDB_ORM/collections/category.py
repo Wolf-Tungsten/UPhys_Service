@@ -8,7 +8,8 @@ class Category(CollectionBase):
     # GET /categories
     async def get_categories(self, privilege):
         condition = {'privilege': {'$lt': privilege + 1}}
-        cursor = self.collection.find(condition)
+        sort = [('seq', self.ASCENDING)]
+        cursor = self.collection.find(condition, sort=sort)
         result = []
         async for doc in cursor:
             doc['_id'] = str(doc['_id'])
@@ -24,6 +25,7 @@ class Category(CollectionBase):
 
     # POST /category
     async def post_category(self, category):
+        category['seq'] = await self.get_current_seq()
         return await self.insert_one(category)
 
     # PUT /category
@@ -47,6 +49,23 @@ class Category(CollectionBase):
             'name': '',  # 分类名称
             'desc': '',  # 分类简介
             'icon': '',  # 分类图标url
-            'privilege': 0  # 分类访问权限(所有人=0 用户=1 管理员=2)
+            'privilege': 0,  # 分类访问权限(所有人=0 用户=1 管理员=2)
+            'seq': 0
         }
         return category
+
+    async def sort(self, id_1, id_2):
+        seq_1 = await self.find_one_by_id(id_1)
+        seq_2 = await self.find_one_by_id(id_2)
+        seq_1 = seq_1['seq']
+        seq_2 = seq_2['seq']
+        await self.update_one_by_id(id_1, {'seq': int(seq_2)})
+        await self.update_one_by_id(id_2, {'seq': int(seq_1)})
+
+    async def get_current_seq(self):
+        current = await self.find_all()
+        seq = 0
+        for item in current:
+            if seq < int(item['seq']):
+                seq = int(item['seq'])
+        return seq + 1
