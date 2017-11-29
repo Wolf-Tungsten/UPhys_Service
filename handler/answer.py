@@ -239,74 +239,8 @@ class AnswerHandler(BaseHandler):
         await self.db.user.change_exp(user_id,-20)
         self.finish_success(result='ok')
 
-class VoteHandler_d(BaseHandler):
-    """
-        @api {post} /answer/vote 给答案打call
-        @apiName VoteAnswer
-        @apiGroup Answer
-        @apiDeprecated use now (#Vote:UpVote)
-        @apiParam {String} answer_id 问题id
-
-        @apiParamExample {json} Request-Example:
-            {
-                "answer_id": [答案id]
-            }
-        @apiSuccessExample {json} Success-Response:
-        HTTP/1.1 200 OK
-        {
-            "status": "success",
-            "code": "200",
-            "result": "ok"
-        }
-
-        @apiError 401-AuthError 身份认证失败
-        @apiError 404-PermissionDeniedError 没有访问权限
-
-    """
-    async def post(self):
-        user_id = await self.user_id
-        answer_id = self.get_argument("answer_id")
-        if not await self.answer_allow:
-            raise PermissionDeniedError("没有访问权限")
-        await self.db.answer.post_answer_vote(answer_id,user_id)
-        user_id = await self.db.answer.get_user_id(answer_id)
-        await self.db.user.change_exp(user_id, 1)
-        self.finish_success(result='ok')
-    """
-        @api {delete} /answer/vote 取消投票
-        @apiName DeleteVoteAnswer
-        @apiGroup Answer
-        @apiDeprecated use now (#Vote:DownVote)
-        @apiParam {String} answer_id 问题id
-
-        @apiParamExample {json} Request-Example:
-            {
-                "answer_id": [答案id]
-            }
-        @apiSuccessExample {json} Success-Response:
-        HTTP/1.1 200 OK
-        {
-            "status": "success",
-            "code": "200",
-            "result": "ok"
-        }
-
-        @apiError 401-AuthError 身份认证失败
-        @apiError 404-PermissionDeniedError 没有访问权限
-
-    """
-    async def delete(self):
-        user_id = await self.user_id
-        answer_id = self.get_argument("answer_id")
-        if not await self.answer_allow:
-            raise PermissionDeniedError("没有访问权限")
-        await self.db.answer.delete_answer_vote(answer_id,user_id)
-        user_id = await self.db.answer.get_user_id(answer_id)
-        await self.db.user.change_exp(user_id, -1)
-        self.finish_success(result='ok')
 
 routes.handlers +=[
     (r'/answers',sAnswerHandler),
-    (r'/answer',AnswerHandler),
-    (r'/answer/vote',VoteHandler_d)
+    (r'/answer',AnswerHandler)
 ]
