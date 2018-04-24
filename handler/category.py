@@ -1,7 +1,7 @@
 from handler.base import BaseHandler
 import routes
 from handler.exceptions import PermissionDeniedError,ResourceNotExistError
-import IPython
+
 
 class sCategoryHandler(BaseHandler):
     """

@@ -20,11 +20,15 @@ class Question(CollectionBase):
         condition = {'user_id': user_id}
         sort = [('post_time', pymongo.DESCENDING)]
         result = await self.find_pages_by_condition(condition, sort=sort, pagesize=pagesize, page=page)
-        return result
+        count = await self.get_count_by_condition(condition)
+        return result, count
 
     async def get_a_question_by_code(self, code):
         condition = {'code': code}
         return await self.find_by_condition(condition)
+
+    async def get_a_question_by_id(self, question_id):
+        return await self.find_one_by_id(question_id)
 
     async def put_up_a_question(self, user_id, question, image_url, answer):
         # 生成6位问题code
@@ -41,12 +45,8 @@ class Question(CollectionBase):
         await self.insert_one(template)
         return code
 
-    async def modify_a_question(self, question_id, **kwargs):
-        old_question = await self.find_one_by_id(question_id)
-        for (k, v) in kwargs:
-            old_question[k] = v
-        old_question['post_time'] = self.timestamp()
-        await self.update_one_by_id(question_id, old_question)
+    async def modify_a_question(self, question_id, modified):
+        await self.update_one_by_id(question_id, modified)
 
     async def delete_a_question(self, question_id):
         await self.delete_one_by_id(question_id)
@@ -63,9 +63,7 @@ class Answer(CollectionBase):
             "post_time": '',  # 问题回答的时间
         }
 
-    async def answer_a_question(self, student_id, question_id, answer):
-        question = await self.find_one_by_id(question_id)
-        is_correct = question['answer'] == str(answer)
+    async def answer_a_question(self, student_id, question_id, answer, is_correct):
         template = self.get_default()
         template['student_id'] = student_id
         template['question_id'] = question_id
@@ -77,9 +75,13 @@ class Answer(CollectionBase):
     async def get_answers_of_a_student(self, student_id, pagesize, page):
         sort = [('post_time', pymongo.DESCENDING)]
         condition = {'student_id': student_id}
-        return await self.find_pages_by_condition(condition, sort=sort, pagesize=pagesize, page=page)
+        result = await self.find_pages_by_condition(condition, sort=sort, pagesize=pagesize, page=page)
+        count = await self.get_count_by_condition(condition)
+        return result, count
 
     async def get_answers_of_a_question(self, question_id, pagesize, page):
         sort = [('post_time', pymongo.DESCENDING)]
         condition = {'question_id': question_id}
-        return await self.find_pages_by_condition(condition, sort=sort, pagesize=pagesize, page=page)
+        result = await self.find_pages_by_condition(condition, sort=sort, pagesize=pagesize, page=page)
+        count = await self.get_count_by_condition(condition)
+        return result, count

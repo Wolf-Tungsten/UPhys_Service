@@ -4,7 +4,7 @@ from tornado.options import options, define
 from MongoDB_ORM.ORM import ORM
 #import config
 import routes
-import IPython
+
 
 define("port", default=7942, help="本地监听端口", type=int)
 define("DEBUG", default=True, help="是否开启debug模式", type=bool)

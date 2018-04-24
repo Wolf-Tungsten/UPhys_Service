@@ -1,5 +1,4 @@
 from MongoDB_ORM.collections.base import CollectionBase
-import IPython
 
 class Answer(CollectionBase):
     def __init__(self, db):
